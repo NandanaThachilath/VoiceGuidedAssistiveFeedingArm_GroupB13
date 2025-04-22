@@ -1,1 +1,7 @@
 # VoiceGuidedAssistiveFeedingArm_GroupB13
+# Abstract
+The Spoonfeeding Robotic Arm is an assistive technology project that integrates machine learning, speech recognition, and robotics to support individuals with physical disabilities, elderly individuals, and those affected by conditions such as cerebral palsy, muscular dystrophy, or spinal cord injuries. For people with limited mobility, everyday tasks like feeding can be challenging or impossible without assistance. This project aims to restore a sense of independence and dignity by enabling users to control a robotic arm using simple voice commands—completely hands-free.
+
+At the core of the system is a Convolutional Neural Network (CNN) trained on speech commands (“one”, “two”, “three”), allowing the robot to interpret vocal input and perform corresponding feeding tasks. Each voice command maps to a specific bowl position, enabling the robot to accurately pick up food and serve it to the user. The model runs in real time, listening through a microphone and responding only when it detects clear and confident inputs.
+
+The physical implementation uses the uFactory Lite 6 robotic arm, which executes precise movements to complete the feeding process. To ensure safety and efficiency, the system is first simulated in PyBullet, allowing developers to refine motion and behavior before deploying it on real hardware. This project highlights how voice-driven robotics can provide practical support and improve daily living for those who need assistance the most.
