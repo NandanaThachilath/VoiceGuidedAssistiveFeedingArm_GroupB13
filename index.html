@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Robotic Arm Project</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="logo">
+        <i class="fas fa-tools"></i>
+        Project Report
+      </div>
+      <ul>
+        <li><a href="#abstract">ABSTRACT</a></li>
+        <li><a href="#toc">TABLE OF CONTENTS</a></li>
+        <li><a href="#introduction">INTRODUCTION</a></li>
+        <li><a href="#objectives">OBJECTIVES</a></li>
+        <li><a href="#methodology">METHODOLOGY</a></li>
+        <li><a href="#hardware">HARDWARE</a></li>
+        <li><a href="#software">SOFTWARE</a></li>
+        <li><a href="#references">REFERENCES</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-overlay">
+      <h1>Voice-Controlled Spoon Feeding Robotic Arm</h1>
+      <p>Smart Guided Assistive Systems for Personalized Accessibility Support</p>
+    </div>
+    <a href="#introduction" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p>This project explores the design and implementation of a voice-controlled robotic arm system intended to assist individuals with upper limb disabilities in spoon-feeding tasks. The system enables hands-free control of the robotic arm using simple spoken commands, which are processed and classified using deep learning techniques. Specifically, voice inputs such as “one”, “two”, and “three” are captured via a microphone, converted into Mel-Frequency Cepstral Coefficients (MFCCs), and passed through a Convolutional Neural Network (CNN) trained in PyTorch to identify the correct action.
+
+The recognized command is mapped to a corresponding feeding position, and the robot arm follows a smooth trajectory to perform the task. The motion planning involves defining waypoints for the spoon movement and applying cubic interpolation to generate a continuous path. Inverse kinematics are solved using Jacobian-based iterative methods to compute the required joint angles of the robotic arm. The solution ensures that the robot operates smoothly and precisely without exceeding its joint limits.
+
+The system is first tested in simulation using PyBullet, where the environment mimics the physical setup and validates the safety and accuracy of the trajectories. The final implementation uses the uFactory Lite 6 robotic arm, programmed via a TCP/IP interface in Python, to execute real-world tasks. The performance of the system demonstrates effective recognition of voice commands with minimal latency and accurate execution of feeding motions.
+
+This project combines machine learning, robotics, and assistive technology to create a cost-effective and practical solution for real-world rehabilitation and caregiving scenarios. The voice-controlled robotic arm not only enhances user independence but also showcases how AI and robotics can be integrated to solve everyday accessibility challenges.</p>
+    </section>
+    <section id="toc">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#literature-review">Literature Review & Related Work</a></li>
+        <li><a href="#methodology">Methodology & Implementation</a></li>
+        <li><a href="#results">RESULTS</a></li>
+        <li><a href="#results">Results and Discussion</a></li>
+        <li><a href="#demo">Demo of Simulation</a></li>
+        <li><a href="#conclusion">Conclusion and Future Work</a></li>
+        <li><a href="#references">References</a></li>
+      </ol>
+    </section>
+
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>This project aims to develop a voice-controlled robotic arm designed to assist individuals with upper limb disabilities in spoon-feeding tasks. By recognizing simple voice commands like "one", "two", or "three", the system identifies which bowl to pick food from. It uses a deep learning model for voice recognition, cubic interpolation for smooth motion planning, and inverse kinematics to calculate the arm’s joint angles. Initial testing is performed in a simulated environment using PyBullet, and real-world execution is carried out using the uFactory Lite 6 robotic arm. The goal is to provide an accessible, hands-free feeding solution to enhance user independence.</p>
+    </section>
+    <section id="literature">
+      <h2>Literature Review & Related Work</h2>
+      
+      <div class="paper">
+        <h3>Robot Arm Control System for Assisted Feeding of People With Disabilities in Their Upper Limbs(2022)</h3>
+        <p class="authors">Daniella ARNÁEZ, Fiorela MANCO, José OLIDEN, Guillermo KEMPER</p>
+        <ul>
+          <li>This paper presents a robot-arm control system that helps people with upper-limb disabilities feed themselves by coupling a spoon to a 5-DOF manipulator and Raspberry Pi controller.It implements a PD-type electronic controller with gravity compensation, plus two safety measures—an emergency stop button and a proximity warning to prevent collisions.Validation over 35 trials each with rice and oatmeal showed an 80 % success rate for rice feeding and 98.9 % for oatmeal, demonstrating reliable assisted-feeding performance. </li>
+        </ul>
+      </div>
+      <div class="paper">
+        <h3>Design of Novel Feeding Robot for Korean Food (2010)</h3>
+        <p class="authors">Won-Kyung Song, Jongbae Kim, Kwang-Ok An, In-Ho Lee</p>
+        <ul>
+          <li>This paper presents a novel feeding‐robotic system tailored for Korean cuisine—combining a food-grasping manipulator and a food-transferring manipulator—to enable persons with upper-limb disabilities to self-feed from general bowls of boiled rice and side dishes. Through prototype experiments, they demonstrated reliable handling of typical Korean foods and showed that the transferring arm module could be deployed to assist multiple users in care facilities or hospitals</li>
+        </ul>
+      </div>
+      <div class="paper">
+        <h3>A Meal-Assistance Robot System for Asian Food and Its Food Acquisition Point Estimation and User Interface Based on Face Recognition (2023)</h3>
+        <p class="authors">Iksu Choi, KwangEun Ko, Hajun Song, Byung-jin Jung</p>
+        <ul>
+          <li>An MAR that uses Mask R-CNN to segment side-dishes on a tray and a face-recognition UI to select which dish to pick. 99 % success in food-area detection and 100 % success in UI-based dish selection, enabling reliable motion-planning targets for the robotic arm. </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="objectives">
+      <h2>Objectives</h2>
+      <ul>
+        <li>Develop a hands-free robotic arm system that assists individuals with upper limb disabilities in spoon-feeding tasks.</li>
+        <li>Implement voice recognition using deep learning techniques to accurately classify spoken commands for controlling the robot.</li>
+        <li>Design smooth and accurate motion trajectories using cubic interpolation for the spoon-feeding process.</li>
+        <li>Apply inverse kinematics to calculate precise joint angles for the robotic arm to reach designated feeding positions.</li>
+        <li>Create an affordable and accessible assistive technology solution that promotes independence and supports rehabilitation needs.</li>
+        <li>Deploy the solution on real hardware using the uFactory Lite 6 robotic arm for practical demonstration and real-world application.</li>
+        <li>Ensure low latency and high reliability in voice-command execution to enhance user experience.</li>
+      </ul>
+    </section>
+
+    <section id="methodology">
+      <h2>Methodology</h2>
+      <p>This project integrates voice recognition and robotic control for a feeding assistant robot using deep learning and trajectory planning. The methodology is organized into the following stages:</p>
+
+      <p><strong>1. Voice Model Training:</strong></p>
+      <p>The voice model training involves processing audio data and training a deep learning model to recognize different spoken commands.</p>
+
+      <p><strong>2. Dataset:</strong></p>
+      <ul>
+        <li>We used the Speech Commands Dataset v0.01 released by Google.</li>
+        <li>This dataset contains thousands of one-second long audio clips of people speaking single words.</li>
+        <li>For our project, we selected only three specific keywords: "one", "two", and "three".</li>
+      </ul>
+
+      <p><strong>3. Feature Extraction:</strong></p>
+      <p>For each audio sample, 40 Mel-frequency cepstral coefficients (MFCCs) were extracted to capture essential features of the speech signal. To ensure consistency and compatibility with the convolutional neural network (CNN), the MFCC matrices were resized and padded to a uniform shape of 64×64.</p>
+<p><strong>4. MFCC Architecture:</strong></p>
+      <img src='Mfcc.png' alt="MFCC Architecture" class="center" />
+
+      <p><strong>5. Pre-Emphasis:</strong></p>
+      <p>Pre-emphasis is a signal processing technique used in speech/audio analysis to amplify the high-frequency components.</p>
+      <img src='5.png' alt="Pre-Emphasis Image" class="center" />
+
+      <p><strong>6. Framing:</strong></p>
+      <p>Framing is the process of dividing a continuous speech signal into small, overlapping chunks (called frames), so each chunk can be analyzed separately.</p>
+
+      <p><strong>7. Windowing:</strong></p>
+      <p>Once the signal is framed, each frame is multiplied by a window function (usually a Hamming window) to smooth the edges.</p>
+      <img src='7.png' alt="Windowing Image" class="center" />
+
+      <p><strong>8. Fast Fourier Transform (FFT):</strong></p>
+      <p>Transform each windowed frame to the frequency domain.</p>
+      <img src='8.png' alt="FFT Image" class="center" />
+
+      <p><strong>9. Mel Filter Bank Processing:</strong></p>
+      <ul>
+        <li>This step transforms the frequency domain representation of the audio (from FFT) into the Mel scale, which is more aligned with human auditory perception.</li>
+        <li>The Mel Filter Bank step applies triangular band-pass filters on the power spectrum output from FFT.</li>
+      </ul>
+      <img src='9.png'alt="Mel Filter Bank Image" class="center" />
+<p><strong>10. Log Energy Computation:</strong></p>
+      <ul>
+        <li>Computes logarithm of energy in each Mel filter channel.</li>
+      </ul>
+
+      <p><strong>11. Discrete Cosine Transform (DCT):</strong></p>
+      <ul>
+        <li>Transforms log-Mel energies into compact MFCC vectors.</li>
+      </ul>
+      <img src='11.png' alt="DCT" class="center" />
+
+      <p><strong>12. Model Architecture:</strong></p>
+      <ul>
+        <li>Three Conv2D layers with ReLU activation.</li>
+<li>This was followed by a GlobalAveragePooling layer, a Dense layer, a
+Dropout layer, and a final Dense output layer with softmax activation
+for three-class classification</li>
+
+      </ul>
+
+      <p><strong>13. Convolutional Layer:</strong></p>
+      <ul>
+        <li>Detects features using sliding kernels over input.</li>
+      </ul>
+      <img src='13.png' alt="Convolution Layer" class="center" />
+<p><strong>Dense:</strong></p>
+<ul>
+    <li>The Dense layer connects every neuron in the previous layer to every
+neuron in the current layer, allowing the model to make a prediction
+based on all the features learned by the convolutional and pooling
+layers.</li>
+      </ul>
+<p><strong>Dropout:</strong></p>
+<ul>
+    <li>The Dropout layer randomly drops a fraction of neurons during training
+to prevent overfitting by reducing reliance on specific neurons.</li>
+      </ul>
+
+      <p><strong>14. Softmax:</strong></p>
+      <ul>
+        <li>Converts logits into class probabilities.</li>
+      </ul>
+      <img src='14.png'alt="Softmax" class="center" />
+
+      <p><strong>15. Motion Planning:</strong></p>
+      <ul>
+        <li>Waypoints defined in Cartesian coordinates and Euler angles.</li>
+        <li>Three feeding positions: “one”, “two”, and “three”.</li>
+        <li>Includes neutral pose, approach, dip, and return phases.</li>
+      </ul>
+
+      <p><strong>16. Trajectory Generation:</strong></p>
+      <ul>
+        <li>Uses cubic interpolation for position smoothing.</li>
+        <li>Slerp used for smooth orientation transitions.</li>
+      </ul>
+
+      <p><strong>17. Inverse Kinematics (IK):</strong></p>
+      <ul>
+        <li>Uses Jacobian-based IK with Forward Kinematics (FK).</li>
+        <li>Computes error between current and target pose.</li>
+        <li>Jacobian Transpose method iteratively updates joint angles.</li>
+        <li>Damped Least Squares (DLS) adds regularization.</li>
+        <li>Iterations stop when error is minimized or max count reached.</li>
+      </ul>
+      <img src='16.png'alt="Inverse Kinematics" class="center" />
+    </section>
+    <section id="results">
+      <h2>Results and Discussion</h2>
+      <div class="results-content">
+        <ul class="results-list">
+          <li>The developed system was thoroughly evaluated in both simulated and physical environments. During PyBullet simulation, the robotic arm exhibited accurate responses to voice commands, following smooth and precise trajectories to the designated bowl positions.</li>
+          <li>This affirmed the robustness of the voice recognition model and the effectiveness of the trajectory planning mechanism.</li>
+          <li>In hardware implementation using the uFactory Lite 6 arm, the system reliably interpreted the spoken commands (“one,” “two,” and “three”) and executed corresponding feeding motions with high precision.</li>
+          <li>Overall, the system proved to be both reliable and easy to use, showing strong potential for real-world assistive applications.</li>
+        </ul>
+        
+        <div class="button-group">
+          <a href="#hardware" class="nav-button hardware-btn">
+            <i class="fas fa-microchip"></i>
+            <span class="btn-text">Hardware Demo</span>
+            <div class="shine"></div>
+          </a>
+          <a href="#software" class="nav-button software-btn">
+            <i class="fas fa-laptop-code"></i>
+            <span class="btn-text">Software Simulation</span>
+            <div class="shine"></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="hardware">
+  <h2>Hardware Implementation</h2>
+  <div class="video-box">
+    <video controls width="640">
+      <source src='hardware.mp4' type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>
+<section id="software">
+  <h2>Software Simulation</h2>
+  <div class="video-box">
+    <video controls width="640">
+      <source src='simulation viedo.mp4' type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>
+<!-- Conclusion Section -->
+<section id="conclusion">
+  <h2>Conclusion and Future Work</h2>
+  <div class="conclusion-content">
+    <ul class="results-list">
+      <li>This project successfully integrates voice recognition with a robotic arm to perform spoon-feeding tasks.</li>
+      <li>Using MFCC-based voice command classification, the system interprets user input to trigger predefined feeding motions.</li>
+      <li>The robotic arm's trajectories were computed using Jacobian-based inverse kinematics in a PyBullet environment.</li>
+      <li>Real-time simulation was validated with hardware implementation using the UFactory Lite 6 arm.</li>
+      <li>The system demonstrates a promising assistive solution for individuals with motor impairments.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- References Section -->
+<section id="references">
+  <h2>References</h2>
+  <div class="references-box">
+    <ol>
+      <li>
+        Arnáez, D., Manco, F., Oliden, J., & Kemper, G. (2022). Robot Arm Control System for Assisted Feeding of People With Disabilities in Their Upper Limbs. 
+        <a href="https://www.researchgate.net/publication/364728019" target="_blank">https://www.researchgate.net/publication/364728019</a>
+      </li>
+      <li>
+        Song, W.-K., Kim, J., An, K.-O., & Lee, I.-H. (2010). Design of Novel Feeding Robot for Korean Food. 
+        <a href="https://www.google.com/search?q=Design+of+Novel+Feeding+Robot+for+Korean+Food+(2010)" target="_blank">https://www.google.com/search?q=Design+of+Novel+Feeding+Robot</a>
+      </li>
+
+      <li>
+        Choi, I., Ko, K., Song, H., & Jung, B.-J. (2023). A Meal-Assistance Robot System for Asian Food and Its Food Acquisition Point Estimation and User Interface Based on Face Recognition. 
+        <a href="https://www.researchgate.net/publication/369001925" target="_blank">https://www.researchgate.net/publication/369001925</a>
+      </li>
+      <li>
+        uFactory. (2023). uFactory Lite 6 Robotic Arm User Manual. 
+        <a href="https://www.google.com/search?q=ufactory+lite+6+manual" target="_blank">https://www.ufactory.cc/products/lite6</a>
+      </li>
+    </ol>
+  </div>
+</section>
+     </main>
+
+  <footer>
+  <div class="footer-content">
+    <div class="group-info">
+      <h3> B Group 13</h3>
+      <ul class="member-list">
+        <li>M. Sravanthi Suma - 23148</li>
+        <li>Nandana Thachilath M - 23151</li>
+        <li>Vysakh Unnikrishnan - 23161</li>
+      </ul>
+    </div>
+    <p class="copyright">© 2025 Robotic Arm Project | Voice Controlled Spoon Feeding Robotic Arm</p>
+  </div>
+</footer>
+</body>
+</html>
